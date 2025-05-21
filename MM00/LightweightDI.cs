@@ -32,6 +32,14 @@ namespace Mixmotion00
             return (T)_injectableMap[typeof(T)];
         }
 
+        public IEnumerable<T> GetInjectClassess<T>() where T : class
+        {
+            return _injectableMap.
+                Where(kv => typeof(T).IsAssignableFrom(kv.Key))
+                .Select(kv => kv.Value).
+                Cast<T>();
+        }
+
         public void BindDependencies()
         {
             foreach (var kvp in _injectableMap)
