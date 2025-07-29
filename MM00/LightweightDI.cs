@@ -10,6 +10,8 @@ namespace Mixmotion00
     {
         private Dictionary<Type, object> _injectableMap = new Dictionary<Type, object>();
 
+        public Dictionary<Type, object> InjectableMap { get => _injectableMap; set => _injectableMap = value; }
+
         /// <summary>
         /// Register the class into container map
         /// </summary>
@@ -17,7 +19,7 @@ namespace Mixmotion00
         /// <param name="service"></param>
         public void Register<T>(T service)
         {
-            _injectableMap[typeof(T)] = service;
+            InjectableMap[typeof(T)] = service;
         }
 
         /// <summary>
@@ -26,16 +28,16 @@ namespace Mixmotion00
         /// <returns></returns>
         public T Resolve<T>()
         {
-            if (!_injectableMap.ContainsKey(typeof(T)))
+            if (!InjectableMap.ContainsKey(typeof(T)))
             {
                 Debug.LogError($"No such class found from container map!");
             }
-            return (T)_injectableMap[typeof(T)];
+            return (T)InjectableMap[typeof(T)];
         }
 
         public IEnumerable<T> GetInjectClassess<T>() where T : class
         {
-            return _injectableMap.
+            return InjectableMap.
                 Where(kv => typeof(T).IsAssignableFrom(kv.Key))
                 .Select(kv => kv.Value).
                 Cast<T>();
@@ -43,7 +45,7 @@ namespace Mixmotion00
 
         public void BindDependencies()
         {
-            foreach (var kvp in _injectableMap)
+            foreach (var kvp in InjectableMap)
             {
                 var instance = kvp.Value;
                 var instanceType = instance.GetType();
@@ -52,7 +54,7 @@ namespace Mixmotion00
                 foreach (var field in fields)
                 {
                     var fieldType = field.FieldType;
-                    if(_injectableMap.TryGetValue(fieldType, out var dependency))
+                    if (InjectableMap.TryGetValue(fieldType, out var dependency))
                     {
                         field.SetValue(instance, dependency);
                     }

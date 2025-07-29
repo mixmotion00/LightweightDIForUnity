@@ -33,11 +33,13 @@ namespace Mixmotion00 {
 
         private void Start()
         {
+            _managerPrefab.Init(_diContainer);
+
             _sampleA.PrintMessage();
             _sampleB.PrintMessage();
 
             //test create gameobject using managerprefab di
-            Transform sampleCube = _managerPrefab.Instantiate<Transform>("Sample/SampleCube");
+            SampleCube sampleCube = _managerPrefab.Instantiate<SampleCube>("Sample/SampleCube");
         }
 
         private void Update()
