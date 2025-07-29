@@ -10,6 +10,8 @@ namespace Mixmotion00 {
         private ISampleA _sampleA;
         private ISampleB _sampleB;
 
+        private IManagerPrefab _managerPrefab;
+
         private void Awake()
         {
             // create container object
@@ -18,10 +20,12 @@ namespace Mixmotion00 {
             // create any classess
             _sampleA = new SampleA();
             _sampleB = new SampleB();
+            _managerPrefab = new ManagerPrefab();
 
             // register container
             _diContainer.Register(_sampleA);
             _diContainer.Register(_sampleB);
+            _diContainer.Register(_managerPrefab);
 
             // auto inject dependencies
             _diContainer.BindDependencies();
@@ -31,6 +35,9 @@ namespace Mixmotion00 {
         {
             _sampleA.PrintMessage();
             _sampleB.PrintMessage();
+
+            //test create gameobject using managerprefab di
+            Transform sampleCube = _managerPrefab.Instantiate<Transform>("Sample/SampleCube");
         }
 
         private void Update()
